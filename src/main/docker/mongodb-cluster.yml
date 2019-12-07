@@ -1,0 +1,16 @@
+version: '2'
+services:
+  monolithapplication-mongodb:
+    image: mongo:4.0.13
+    ports:
+      - '27017:27017'
+    command: mongos --configdb monolithapplication-mongodb-config
+  monolithapplication-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  monolithapplication-mongodb-config:
+    image: mongo:4.0.13
+    container_name: monolithapplication-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
